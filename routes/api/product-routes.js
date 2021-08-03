@@ -37,21 +37,19 @@ router.get('/:id', async (req, res) => {
     const productsData = await Product.findOne({
       attributes: ['id', 'product_name', 'price', 'stock', 'category_id'],
       where: {id: req.params.id},
-      include: {
-        model:Product,
-        attributes: ['id', 'product_name', 'price', 'stock', 'category_id'],
+      attributes: ['id', 'product_name', 'price', 'stock', 'category_id'],
 
         include: [
           {
             model: Category,
-            attributes: ['category_name']
+            attributes: ['id','category_name']
           },
           {
             model: Tag,
-            attributes: ['tag_name']
+            attributes: ['id','tag_name']
           }
         ]
-      }
+      
     });
     
     
@@ -73,13 +71,7 @@ router.post('/',(req, res) => {
   */
 
 
-  Product.create( {
-    product_name: req.body.product_name,
-    price: req.body.product_name,
-    stock: req.body.product_name,
-    category_id: req.body.product_name,
-    tagIds: req.body.tagIds,
-  })
+  Product.create(req.body)
     .then((product) => {
       // if there's product tags, we need to create pairings to bulk create in the ProductTag model
       if (req.body.tagIds.length) {
@@ -146,7 +138,7 @@ router.put('/:id', (req, res) => {
 router.delete('/:id', async (req, res) => {
   // delete one product by its `id` value
   try {
-    const productsData = await Product.destroy({
+    const productData = await Product.destroy({
       where: {
         id: req.params.id
       }
@@ -157,7 +149,7 @@ router.delete('/:id', async (req, res) => {
       return;
     }
 
-    res.status(200).json(productsData);
+    res.status(200).json(productData);
   } catch (err) {
     res.status(500).json(err);
   }

@@ -55,7 +55,7 @@ router.post('/', async (req, res) => {
 router.put('/:id', async (req, res) => {
   // update a tag's name by its `id` value
   try {
-    const tag = await Cache.update(
+    const tag = await Tag.update(
       {
         tag_name: req.body.tag_name,
       },
@@ -69,12 +69,13 @@ router.put('/:id', async (req, res) => {
   } catch (err) {
     res.status(500).json(err);
   }
+  res.json(tag);
 });
 
 router.delete('/:id', async (req, res) => {
   // delete on tag by its `id` 
   try {
-    const tagData = await tag.destroy({
+    const tagData = await Tag.destroy({
       where: {
         id: req.params.id
       }
@@ -85,7 +86,7 @@ router.delete('/:id', async (req, res) => {
       return;
     }
 
-    res.status(200).json(categoryData);
+    res.status(200).json(tagData);
   } catch (err) {
     res.status(500).json(err);
   }
